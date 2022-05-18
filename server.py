@@ -3,7 +3,7 @@ from model import connect_to_db, db
 
 
 app = Flask(__name__)
-app.secret_key = 'AIzaSyAHaYSMCZBbwl5l6fdZt4yhHyWWujiMnSU'
+
 
 @app.route("/")
 def homepage():
