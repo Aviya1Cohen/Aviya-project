@@ -1,3 +1,62 @@
 {% extends 'base.html' %}
 
 {% block title %}Recommended Books{% endblock %}
+
+{% block body %}
+  {% if session['username'] %}
+  <nav class="navbar navbar-light bg-light justify-content-between py-1 px-4">
+    <h1>Hello {{session['username']}}!</h1>
+    <form action="/logout" method="POST">
+      <button type="submit" class="btn btn-warning">Logout</button>
+    </form>
+  </nav>
+
+  <h2>All Books</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#id</th>
+        <th scope="col">Book Title</th>
+        <th scope="col">Author</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+        <tr>
+          <th class="col-2" scope="row">{{ book.book_id }}</th>
+          <td class="col-6"><a href="/book/{{ book.book_id }}">{{ book.title }}</a></td>
+          <td class="col-4">{{ book.author }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  {% else %}
+
+  <div class="row mt-3">
+    <div class="col-6 offset-3">
+      <div class="row mb-3">
+        <h2>Log In</h2>
+      </div>
+      <form action="/login" method="POST">
+        <div class="row mb-3">
+          <div class="col">
+            <input type="email" name="email" class="form-control" placeholder="Email address" aria-label="Email address">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password">
+          </div>
+        </div>
+        <div class="row m-1">
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </div>
+        <div class="row m-1">
+          <a class="btn btn-outline-secondary btn-block" href="/signup">Sign up</a>
+        </div>
+      </form>
+  </div>
+  </div>
+  {% endif %}
+{% endblock %}

@@ -13,7 +13,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
-    email = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     eng_level = db.Column(db.Integer)
 
@@ -81,10 +81,6 @@ class Rating(db.Model):
     def __repr__(self):
         return f"<Rating rating_id={self.rating_id} book_id={self.book_id}>"
 
-
-
-
-
 def connect_to_db(flask_app, db_uri="postgresql:///books", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
@@ -94,57 +90,4 @@ def connect_to_db(flask_app, db_uri="postgresql:///books", echo=True):
     db.init_app(flask_app)
 
     print("Connected to the db!")
-
-
-if __name__ == "__main__":
-    from server import app
-    import csv
-    import random
-
-
-    connect_to_db(app)
-    db.create_all()
-
-    genres = ["Action and Adventure", "Classics", "Comic Book or Graphic Novel", "Detective and Mystery", "Fantasy", "Historical Fiction", "Horror", "Literary Fiction"]
-    db.session.add_all([Genre(genre_type=g) for g in genres])
-    db.session.commit()
-
-    genres_ids = range(1, len(genres) + 1) # [1, 2, ..., 8]
-    books = []
-    book_genres = []
-    with open('books.csv') as booksfile:
-        reader = csv.DictReader(booksfile)
-        for row in reader:
-            try:
-                book = Book(
-                    book_id=row['bookID'],
-                    title=row['title'],
-                    author=row['authors'], 
-                    description=row['publisher'] + ' - ' + row['publication_date'],
-                    page_num=int(row['num_pages'])
-                )
-                books.append(book)
-                number_of_genres = random.choice([1, 2, 3])
-                for i in range(number_of_genres):
-                    genre_id = random.choice(genres_ids)
-                    book_genres.append(BookGenre(genre_id=genre_id, book_id=book.book_id))
-            except Exception:
-                print('## Error in row', row)
-                pass
     
-    db.session.add_all(books)
-    db.session.add_all(book_genres)
-    db.session.commit()
-
-
-
-
-
-
-
-
-
-
-
-
-

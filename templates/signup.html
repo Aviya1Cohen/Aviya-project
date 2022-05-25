@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Sign up{% endblock %}
+
+{% block body %}
+<div class="row mt-3">
+  <div class="col-6 offset-3">
+    <div class="row mb-3">
+      <h2>Register</h2>
+    </div>
+    <form action="/signup" method="POST">
+      <div class="row mb-3">
+        <div class="col">
+          <input type="text" name="first_name" class="form-control" placeholder="First name" aria-label="First name">
+        </div>
+        <div class="col">
+          <input type="text" name="last_name" class="form-control" placeholder="Last name" aria-label="Last name">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <input type="email" name="email" class="form-control" placeholder="Email address" aria-label="Email address">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password">
+        </div>
+      </div>
+
+      <div class="row m-1">
+        <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+      </div>
+      <div class="row m-1">
+        <a class="btn btn-outline-secondary btn-block" href="/">Sign in</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
