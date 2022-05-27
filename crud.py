@@ -41,12 +41,21 @@ def get_book_by_id(book_id):
     return Book.query.get(book_id)
 
 
-def create_rating(user, book, score, review):
+def create_rating(user_id, book_id, score, review):
     """Create and return a new rating"""
 
-    rating = Rating(user=user, book=book, score=score, review=review)
+    rating = Rating(user_id=user_id, book_id=book_id, score=score, review=review)
 
     return rating
+
+
+def get_ratings_by_book_id(book_id, user_id):
+    """Return a book by primary key."""
+    user_rating = Rating.query.filter(Rating.book_id == book_id, Rating.user_id == user_id).first()
+    other_ratings = Rating.query.filter(Rating.book_id == book_id, Rating.user_id != user_id).all()
+
+    return (user_rating, other_ratings)
+
 
 
 

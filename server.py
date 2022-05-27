@@ -23,8 +23,22 @@ def show_book(book_id):
     """Show details on a particular book."""
 
     book = crud.get_book_by_id(book_id)
+    (user_rating, other_ratings) = crud.get_ratings_by_book_id(book_id, session['user_id'])
 
-    return render_template("book_details.html", book=book)
+    return render_template("book_details.html", book=book, user_rating=user_rating, other_ratings=other_ratings)
+
+@app.route("/book/<book_id>/rating", methods=["POST"])
+def rate_book(book_id):
+    """Rate a book"""
+
+    score = request.form.get("score")
+    review = request.form.get("review")
+
+    rating = crud.create_rating(user_id=session['user_id'], book_id=book_id, score=score, review=review)
+    db.session.add(rating)
+    db.session.commit()
+
+    return redirect("/book/" + book_id)
 
 
 @app.route("/signup")
@@ -70,6 +84,7 @@ def login():
         flash("Wrong password!")
     else:
         session['username'] = user.first_name + ' ' + user.last_name
+        session['user_id'] = user.user_id
 
     return redirect("/")
 

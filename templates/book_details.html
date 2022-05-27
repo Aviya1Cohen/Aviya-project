@@ -4,36 +4,72 @@
 
 {% block body %}
 
-
-<h1>{{ book.title }}</h1>
-
-<p>
-  Autor: {{ book.author }}
-</p>
-
-<p>
-  Description: {{ book.description }}
-</p>
-
-<p>
-  Number of pages: {{ book.page_num }}
-</p>
+<div class="card text-center my-4">
+  <div class="card-header">
+    Author: {{ book.author }}
+  </div>
+  <div class="card-body">
+    <h4 class="card-title">{{ book.title }}</h4>
+    <p class="card-text">Description: {{ book.description }}</p>
+  </div>
+  <div class="card-footer text-muted">
+    Pages: {{ book.page_num }}
+  </div>
+</div>
 
 
-{% if session.get('user_email') %}
-<h2>Rate this book</h2>
-<form action="/books/{{ book.book_id }}/ratings" method="POST">
-  <p>
-    Rating:
-    <select name="rating">
-      <option value="">Select rating</option>
-      {% for num in range(5) %}
-        <option value="{{ num }}">{{ num }}</option>
-      {% endfor %}
-    </select>
-  </p>
-  <p><input type="submit"></p>
+<h2>Ratings</h2>
+{% if user_rating %}
+<div class="card bg-light text-dark m-3">
+  <div class="card-body">
+    <figure>
+      <blockquote class="blockquote">
+        <p>{{ user_rating.review }}</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+        {{ user_rating.user.first_name }} {{ user_rating.user.last_name }} 
+        <cite title="Source Title">{{ user_rating.score }} stars</cite>
+      </figcaption>
+    </figure>
+  </div>
+</div>
+{% else %}
+<form action="/book/{{ book.book_id }}/rating" method="POST">
+  <div class="row mb-3">
+    <div class="col">
+      <select class="form-select" name="score">
+        <option value="">Select rating</option>
+        {% for num in range(5) %}
+          <option value="{{ num }}">{{ num }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <textarea class="form-control" name="review" rows="3" placeholder="Comment"></textarea>
+    </div>
+  </div>
+  <div class="row m-1">
+    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+  </div>
 </form>
 {% endif %}
+
+{% for rating in other_ratings %}
+<div class="card m-3">
+  <div class="card-body">
+    <figure>
+      <blockquote class="blockquote">
+        <p>{{ rating.review }}</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+        {{ rating.user.first_name }} {{ rating.user.last_name }} 
+        <cite title="Source Title">{{ rating.score }} stars</cite>
+      </figcaption>
+    </figure>
+  </div>
+</div>
+{% endfor %}
 
 {% endblock %}
