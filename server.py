@@ -1,7 +1,7 @@
 """Server for books app."""
 
 from flask import Flask, render_template, flash, redirect, request, session
-from model import connect_to_db, db
+from model import connect_to_db, db, Favorite
 
 import crud
 
@@ -13,7 +13,9 @@ app.secret_key = 'secret_key'
 @app.route("/")
 def homepage():
     """View homepage."""
-    books = crud.get_books()
+    books = []
+    if 'user_id' in session:
+        books = crud.get_books()
 
     return render_template("homepage.html", books=books)
 
@@ -27,6 +29,15 @@ def show_book(book_id):
 
     return render_template("book_details.html", book=book, user_rating=user_rating, other_ratings=other_ratings)
 
+@app.route("/favorites")
+def favorite_books():
+    """Show favorite books for user"""
+
+    books = crud.get_favorite_books()
+
+    return render_template("favorites.html", books=books)
+
+
 @app.route("/book/<book_id>/rating", methods=["POST"])
 def rate_book(book_id):
     """Rate a book"""
@@ -39,6 +50,25 @@ def rate_book(book_id):
     db.session.commit()
 
     return redirect("/book/" + book_id)
+
+@app.route("/favorite/<book_id>", methods=["POST"])
+def add_book_to_favorites(book_id):
+    """Add a book to user's favorites"""
+
+    favorite = crud.create_favorite(user_id=session['user_id'], book_id=book_id)
+    db.session.add(favorite)
+    db.session.commit()
+
+    return redirect(request.referrer)
+
+@app.route("/unfavorite/<favorite_id>", methods=["POST"])
+def delete_book_favorite(favorite_id):
+    """Remove specified fav"""
+
+    Favorite.query.filter_by(favorite_id=favorite_id).delete()
+    db.session.commit()
+
+    return redirect(request.referrer)
 
 
 @app.route("/signup")
