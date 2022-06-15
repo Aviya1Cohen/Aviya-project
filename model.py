@@ -72,7 +72,7 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey("books.book_id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    score = db.Column(db.Integer)
+    english_level = db.Column(db.Integer)
     review = db.Column(db.String)
 
     book = db.relationship("Book")

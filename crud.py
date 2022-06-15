@@ -1,5 +1,6 @@
 """CRUD operations."""
 from sqlalchemy import and_
+from sqlalchemy.sql import func
 from model import User, Book, Rating, Favorite, connect_to_db, db
 from flask import session
 
@@ -29,18 +30,29 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
+def get_english_level_by_book_id():
+    level_to_str={0: 'Easy', 1: 'Medium', 2: 'Hard'}
+    english_level_by_book_id = {}
+    for (book_id, avg_eng_level) in db.session.query(Rating.book_id, func.avg(Rating.english_level).label('average_english_level')).group_by(Rating.book_id).all():
+        english_level_by_book_id[book_id] = level_to_str[int(avg_eng_level)]
+
+    return english_level_by_book_id
 
 def get_books():
     """Return all books."""
 
-    return db.session.query(Book.book_id, Book.title, Book.author, Favorite.favorite_id).join(Favorite, and_(Book.book_id == Favorite.book_id, Favorite.user_id == session['user_id']), isouter=True).limit(500).all()
-
+    books = db.session.query(Book.book_id, Book.title, Book.author, Favorite.favorite_id).join(Favorite, and_(Book.book_id == Favorite.book_id, Favorite.user_id == session['user_id']), isouter=True).limit(500).all()
+    english_level_by_book_id = get_english_level_by_book_id()
+    
+    return (books, english_level_by_book_id)
 
 def get_favorite_books():
     """Return all books."""
 
-    return db.session.query(Favorite.book_id, Favorite.favorite_id, Book.author, Book.title).join(Book, and_(Book.book_id == Favorite.book_id, Favorite.user_id == session['user_id']), isouter=True).limit(500).all()
-
+    books = db.session.query(Favorite.book_id, Favorite.favorite_id, Book.author, Book.title).join(Book, and_(Book.book_id == Favorite.book_id, Favorite.user_id == session['user_id']), isouter=False).limit(500).all()
+    english_level_by_book_id = get_english_level_by_book_id()
+    
+    return (books, english_level_by_book_id)
 
 def get_book_by_id(book_id):
     """Return a book by primary key."""
@@ -48,10 +60,10 @@ def get_book_by_id(book_id):
     return Book.query.get(book_id)
 
 
-def create_rating(user_id, book_id, score, review):
+def create_rating(user_id, book_id, english_level, review):
     """Create and return a new rating"""
 
-    rating = Rating(user_id=user_id, book_id=book_id, score=score, review=review)
+    rating = Rating(user_id=user_id, book_id=book_id, english_level=english_level, review=review)
 
     return rating
 

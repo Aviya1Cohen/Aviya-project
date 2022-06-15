@@ -14,10 +14,11 @@ app.secret_key = 'secret_key'
 def homepage():
     """View homepage."""
     books = []
+    english_level_by_book_id = {}
     if 'user_id' in session:
-        books = crud.get_books()
+        (books, english_level_by_book_id) = crud.get_books()
 
-    return render_template("homepage.html", books=books)
+    return render_template("homepage.html", books=books, english_level_by_book_id=english_level_by_book_id)
 
 
 @app.route("/book/<book_id>")
@@ -27,25 +28,25 @@ def show_book(book_id):
     book = crud.get_book_by_id(book_id)
     (user_rating, other_ratings) = crud.get_ratings_by_book_id(book_id, session['user_id'])
 
-    return render_template("book_details.html", book=book, user_rating=user_rating, other_ratings=other_ratings)
+    return render_template("book_details.html", book=book, user_rating=user_rating, other_ratings=other_ratings, level_str=['Easy', 'Medium', 'Hard'])
 
 @app.route("/favorites")
 def favorite_books():
     """Show favorite books for user"""
 
-    books = crud.get_favorite_books()
+    (books, english_level_by_book_id) = crud.get_favorite_books()
 
-    return render_template("favorites.html", books=books)
+    return render_template("favorites.html", books=books, english_level_by_book_id=english_level_by_book_id)
 
 
 @app.route("/book/<book_id>/rating", methods=["POST"])
 def rate_book(book_id):
     """Rate a book"""
 
-    score = request.form.get("score")
+    english_level = request.form.get("english_level")
     review = request.form.get("review")
 
-    rating = crud.create_rating(user_id=session['user_id'], book_id=book_id, score=score, review=review)
+    rating = crud.create_rating(user_id=session['user_id'], book_id=book_id, english_level=english_level, review=review)
     db.session.add(rating)
     db.session.commit()
 

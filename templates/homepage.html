@@ -11,12 +11,13 @@
         <th scope="col">Favorite</th>
         <th scope="col">Book Title</th>
         <th scope="col">Author</th>
+        <th scope="col">English level</th>
       </tr>
     </thead>
     <tbody>
       {% for book in books %}
         <tr>
-          <th class="col-2" scope="row">
+          <th class="col-1" scope="row">
             {% if book.favorite_id %}
               <form action="/unfavorite/{{ book.favorite_id }}" method="POST">
                 <button type="submit"><i class="bi bi-star-fill"></i></button>
@@ -27,8 +28,9 @@
               </form>
             {% endif %}
           </th>
-          <td class="col-6"><a href="/book/{{ book.book_id }}">{{ book.title }}</a></td>
+          <td class="col-5"><a href="/book/{{ book.book_id }}">{{ book.title }}</a></td>
           <td class="col-4">{{ book.author }}</td>
+          <td class="col-2">{{ english_level_by_book_id[book.book_id] or 'Not rated' }}</td>
         </tr>
       {% endfor %}
     </tbody>

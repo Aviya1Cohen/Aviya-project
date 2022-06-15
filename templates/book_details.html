@@ -28,7 +28,7 @@
       </blockquote>
       <figcaption class="blockquote-footer">
         {{ user_rating.user.first_name }} {{ user_rating.user.last_name }} 
-        <cite title="Source Title">{{ user_rating.score }} stars</cite>
+        <cite title="Source Title">{{ level_str[user_rating.english_level] }} level</cite>
       </figcaption>
     </figure>
   </div>
@@ -37,10 +37,10 @@
 <form action="/book/{{ book.book_id }}/rating" method="POST">
   <div class="row mb-3">
     <div class="col">
-      <select class="form-select" name="score">
-        <option value="">Select rating</option>
-        {% for num in range(5) %}
-          <option value="{{ num }}">{{ num }}</option>
+      <select class="form-select" name="english_level">
+        <option value="">Select english level</option>
+        {% for level in range(3) %}
+          <option value="{{ level }}">{{ level_str[level] }}</option>
         {% endfor %}
       </select>
     </div>
@@ -65,7 +65,7 @@
       </blockquote>
       <figcaption class="blockquote-footer">
         {{ rating.user.first_name }} {{ rating.user.last_name }} 
-        <cite title="Source Title">{{ rating.score }} stars</cite>
+        <cite title="Source Title">{{ level_str[rating.english_level] }} level</cite>
       </figcaption>
     </figure>
   </div>
