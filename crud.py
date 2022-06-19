@@ -31,6 +31,7 @@ def get_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 def get_english_level_by_book_id():
+    """engish level"""
     level_to_str={0: 'Easy', 1: 'Medium', 2: 'Hard'}
     english_level_by_book_id = {}
     for (book_id, avg_eng_level) in db.session.query(Rating.book_id, func.avg(Rating.english_level).label('average_english_level')).group_by(Rating.book_id).all():

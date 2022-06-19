@@ -31,6 +31,7 @@ class Book(db.Model):
     author = db.Column(db.String)
     description = db.Column(db.String)
     page_num = db.Column(db.Integer)
+    image = db.Column(db.String)
 
     def __repr__(self):
         return f"<Book book_id={self.book_id} title={self.title}>"

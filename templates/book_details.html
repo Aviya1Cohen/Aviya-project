@@ -9,11 +9,12 @@
     Author: {{ book.author }}
   </div>
   <div class="card-body">
+    <img src="{{ book.image }}" class="img-thumbnail my-2">
     <h4 class="card-title">{{ book.title }}</h4>
     <p class="card-text">Description: {{ book.description }}</p>
   </div>
   <div class="card-footer text-muted">
-    Pages: {{ book.page_num }}
+    Pages: {% if book.page_num == -1 %} X {% else %} {{ book.page_num }} {% endif %}
   </div>
 </div>
 
