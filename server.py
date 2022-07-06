@@ -73,12 +73,9 @@ def delete_book_favorite(favorite_id):
 
 
 @app.route("/signup")
-def all_users():
+def signup():
     """registration form"""
-
-    users = crud.get_users()
-
-    return render_template("signup.html" , users=users)
+    return render_template("signup.html")
 
 @app.route("/signup", methods=["POST"])
 def register_user():
@@ -100,6 +97,11 @@ def register_user():
         flash("Registration successful. You can now log in.")
 
         return redirect("/")
+    
+@app.route("/login")
+def sigin():
+    """loginh form"""
+    return render_template("login.html" )
 
 @app.route("/login", methods=["POST"])
 def login():

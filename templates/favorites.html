@@ -19,11 +19,11 @@
           <th class="col-1" scope="row">
             {% if book.favorite_id %}
               <form action="/unfavorite/{{ book.favorite_id }}" method="POST">
-                <button type="submit"><i class="bi bi-star-fill"></i></button>
+                <button type="submit"><i class="bi bi-heart-fill"></i></button>
               </form>
             {% else %}
               <form action="/favorite/{{ book.book_id }}" method="POST">
-                <button type="submit"><i class="bi bi-star"></i></button>
+                <button type="submit"><i class="bi bi-heart"></i></button>
               </form>
             {% endif %}
           </th>
