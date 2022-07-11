@@ -1,5 +1,5 @@
 # BOOKS RECOMMENDATION FOR ENGLISH LEARNERS
-<img width="765" alt="Screen Shot 2022-07-11 at 1 35 02 PM" src="https://user-images.githubusercontent.com/98374470/178358055-7ac3209f-28cf-4318-92be-4c08d12b24ce.png">
+<img width="965" alt="Screen Shot 2022-07-11 at 1 35 02 PM" src="https://user-images.githubusercontent.com/98374470/178358055-7ac3209f-28cf-4318-92be-4c08d12b24ce.png">
 
 This book recommendation website is designed to help English learners find books that fit their English level.
 Users can see a list of all books, or search for a specific book by name, author, or English level. It also allows users to add books to their favorite lists.
